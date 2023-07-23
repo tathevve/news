@@ -3,13 +3,13 @@ import {View, Alert, StyleSheet} from 'react-native';
 import React from 'react';
 // import RNButton from '../../shared/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import TextInputField from '../../shared/TextInput/TextInputField';
-// import {
-//   emailValidation,
-//   inputMaxLengthLimit,
-//   inputMinLengthLimit,
-//   requiredField,
-// } from '../../shared/models/validations/Validation';
+import TextInputField from '../../shared/TextInput///download.docker.com/linux/ubuntu';
+import {
+  emailValidation,
+  inputMaxLengthLimit,
+  inputMinLengthLimit,
+  requiredField,
+} from '../../shared/validation/Validation';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
