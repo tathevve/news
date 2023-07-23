@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import {View, Alert, StyleSheet} from 'react-native';
+import {View, Alert, StyleSheet, Text} from 'react-native';
 import React from 'react';
 // import RNButton from '../../shared/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TextInputField from '../../shared/TextInput///download.docker.com/linux/ubuntu';
+import TextInputField from '../../shared/TextInput';
 import {
   emailValidation,
   inputMaxLengthLimit,
@@ -18,6 +18,7 @@ import {setUserData} from '../../redux/slicers/loginSlice';
 import {IconButton} from 'react-native-paper';
 import {EPath} from '../../shared/models/enums/path.enum';
 import {useToast} from 'react-native-toast-notifications';
+import RNButton from '../../shared/Button';
 
 interface IUserForm {
   email: string;
@@ -126,22 +127,11 @@ const SignIn = (): JSX.Element => {
       <View style={{marginHorizontal: 17}}>
         <View style={{height: '82%'}}>
           <View style={{marginBottom: 35}}>
-            <IconButton
-              icon="arrow-left-thin"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                height: 30,
-                width: 30,
-                zIndex: 2,
-              }}
-              onPress={() => navigation.goBack()}
-            />
+            <Text style={styles.text}>Log In to Your Informed Today Account</Text>
           </View>
           <View>
             <FormProvider {...methods}>
-              {/* <TextInputField
+              <TextInputField
                 placeholder="Email"
                 name="email"
                 labelIsVisible
@@ -168,12 +158,13 @@ const SignIn = (): JSX.Element => {
                 }}
                 customInputStyles={styles.input}
                 customPasswordStyles={styles.passwordIcon}
-              /> */}
-              {/* <RNButton
+              />
+              <RNButton
                 title="Sign In"
                 onPress={handleSubmit(signIn)}
                 buttonStyle={styles.button}
-              /> */}
+                textStyle={styles.btnText}
+              />
             </FormProvider>
           </View>
 
@@ -189,7 +180,7 @@ export const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 5,
@@ -197,8 +188,15 @@ export const styles = StyleSheet.create({
     height: 35,
     marginTop: 35,
     borderStyle: 'solid',
-    color: 'black',
-    marginBottom: 15,
+    marginBottom: 5,
+  },
+  btnText: {
+    color: 'white',
+  },
+  text: {
+    fontSize: 20,
+    marginTop: 15,
+
   },
   input: {
     marginBottom: 30,

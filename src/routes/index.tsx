@@ -11,6 +11,7 @@ import {IconButton, Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {selectIsLoading} from '../redux/slicers/app';
 import ScreenLayout from '../layout/ScreenLayout';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 
 const RootStack = createStackNavigator();
@@ -31,13 +32,37 @@ const TabNavigator = (): JSX.Element => (
         ),
         tabBarIcon: ({focused}) => {
           return focused ? (
+            <Ionicon
+          name='home'
+          size={22}
+        />
+          ) : (
+            <Ionicon
+          name='home-outline'
+          size={20}
+        />
+          );
+        },
+      }}
+    />
+    {/* <Tab.Screen
+      name={EPath.SIGNIN}
+      component={SignIn}
+      options={{
+        tabBarLabel: ({focused}) => (
+          <Text style={{color: focused ? 'black' : 'gray', fontSize: 13}}>
+            sign
+          </Text>
+        ),
+        tabBarIcon: ({focused}) => {
+          return focused ? (
             <IconButton icon="eye" size={22} />
           ) : (
             <IconButton icon="home" size={20} />
           );
         },
       }}
-    />
+    /> */}
     <Tab.Screen
       name={EPath.ACCOUNT}
       component={AccountRoute}
@@ -47,13 +72,19 @@ const TabNavigator = (): JSX.Element => (
             Me
           </Text>
         ),
-        // tabBarIcon: ({focused}) => {
-        //   return focused ? (
-        //     <IconButton icon="account" size={22} />
-        //   ) : (
-        //     <IconButton icon="account-outline" size={20} />
-        //   );
-        // },
+        tabBarIcon: ({focused}) => {
+          return focused ? (
+            <Ionicon
+          name='account'
+          size={22}
+        />
+          ) : (
+            <Ionicon
+          name='account-outline'
+          size={20}
+        />
+          );
+        },
       }}
     />
   </Tab.Navigator>
@@ -62,7 +93,7 @@ const TabNavigator = (): JSX.Element => (
 const RootNavigator = (): JSX.Element => {
   return (
     <RootStack.Navigator
-      initialRouteName={EPath.PARENTHOME}
+      initialRouteName={EPath.SIGNIN}
       screenOptions={{
         headerTitleAlign: 'center',
         headerStyle: {
@@ -80,7 +111,7 @@ const RootNavigator = (): JSX.Element => {
           headerShown: false,
         }}
       />
- <RootStack.Screen
+    <RootStack.Screen
         name={EPath.SIGNIN}
         component={SignIn}
         options={{

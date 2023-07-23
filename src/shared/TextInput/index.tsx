@@ -100,7 +100,7 @@ const TextInputField = ({
       ) : null}
       {isPassword && (
         <Ionicon
-          name={!isPasswordVisible ? 'md-eye-off' : 'md-eye'}
+          name={!isPasswordVisible ? 'eye-off' : 'eye'}
           style={customPasswordStyles}
           size={20}
           onPress={handlePasswordToggle}
