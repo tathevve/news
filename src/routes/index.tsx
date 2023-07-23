@@ -105,7 +105,7 @@ const RootNavigator = (): JSX.Element => {
         },
       }}>
       <RootStack.Screen
-        name={EPath.PARENTHOME}
+        name={EPath.HOME}
         component={TabNavigator}
         options={{
           headerShown: false,

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {View, Alert, StyleSheet, Text} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 // import RNButton from '../../shared/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextInputField from '../../shared/TextInput';
@@ -19,6 +19,7 @@ import {IconButton} from 'react-native-paper';
 import {EPath} from '../../shared/models/enums/path.enum';
 import {useToast} from 'react-native-toast-notifications';
 import RNButton from '../../shared/Button';
+import { create } from 'apisauce'
 
 interface IUserForm {
   email: string;
@@ -31,6 +32,7 @@ const defaultValues = {
 };
 
 const SignIn = (): JSX.Element => {
+  const [userData, setUserData] = useState();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const toast = useToast();
@@ -63,7 +65,7 @@ const SignIn = (): JSX.Element => {
             duration: 4000,
             animationType: 'slide-in',
           });
-          navigation.navigate(EPath.PARENTHOME as never);
+          navigation.navigate(EPath.HOME as never);
         } else {
           console.log(
             data.email,
@@ -88,40 +90,23 @@ const SignIn = (): JSX.Element => {
   const signinHandler = async (formData: IUserForm) => {
     const data = {...formData};
 
-    fetch('http://10.0.2.2:5000/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: data.email,
-        password: data.password,
-      }),
+    const api = create({
+      baseURL: 'https://lzone.secret-agents.ru',
+      // headers: { Accept: 'application/vnd.github.v3+json' },
     })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error: ' + response.status);
-        }
-      })
-      .then(data => {
-        toast.show(data.message, {
-          type: 'success',
-          placement: 'top',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
-      })
-      .catch(error => {
-        toast.show('An error occurred: ' + error.message, {
-          type: 'danger',
-          placement: 'top',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
-      });
+
+    const abo = api.post('/api/v2/auth/sign_in', { email: 'bullet2271293@gmail.com', password: 'beta1234' })
+    console.log(abo, 'aboaas')
+    dispatch(setUserData(abo));
+          toast.show('Logged in successfully', {
+            type: 'success',
+            placement: 'top',
+            duration: 4000,
+            animationType: 'slide-in',
+          });
+          navigation.navigate(EPath.HOME as never);
   };
+
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
       <View style={{marginHorizontal: 17}}>
@@ -161,7 +146,7 @@ const SignIn = (): JSX.Element => {
               />
               <RNButton
                 title="Sign In"
-                onPress={handleSubmit(signIn)}
+                onPress={handleSubmit(signinHandler)}
                 buttonStyle={styles.button}
                 textStyle={styles.btnText}
               />
