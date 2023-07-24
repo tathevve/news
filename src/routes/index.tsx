@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeRoute from '../screens/bottomPages/home/HomeRoute';
-import SignIn from '../screens/signIn/SignIn';
+import SignIn, { isAuthenticated } from '../screens/signIn/SignIn';
 import AccountRoute from '../screens/bottomPages/account/AccountRoute';
 import CircularLoader from '../shared/Loader/CircularLoader';
 import {EPath} from '../shared/models/enums/path.enum';
@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = (): JSX.Element => (
   <Tab.Navigator
-    initialRouteName={EPath.HOME}
+    initialRouteName={EPath.SIGNIN}
     screenOptions={{headerShown: false}}>
     <Tab.Screen
       name={EPath.HOME}
@@ -91,9 +91,19 @@ const TabNavigator = (): JSX.Element => (
 );
 
 const RootNavigator = (): JSX.Element => {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check authentication status when the app starts
+    isAuthenticated().then((result) => {
+      setAuthenticated(result);
+      // setLoading(false);
+    });
+  }, []);
+console.log(authenticated, 'is uth')
   return (
     <RootStack.Navigator
-      initialRouteName={EPath.SIGNIN}
+      initialRouteName={EPath.HOME}
       screenOptions={{
         headerTitleAlign: 'center',
         headerStyle: {

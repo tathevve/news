@@ -1,8 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {View, Alert, StyleSheet, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 // import RNButton from '../../shared/Button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import TextInputField from '../../shared/TextInput';
 import {
   emailValidation,
@@ -20,7 +19,18 @@ import {EPath} from '../../shared/models/enums/path.enum';
 import {useToast} from 'react-native-toast-notifications';
 import RNButton from '../../shared/Button';
 import { create } from 'apisauce'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Function to check if the user is logged in
+export const isAuthenticated = async () => {
+  try {
+    const token = await AsyncStorage.getItem('authorization');
+    return token !== null;
+  } catch (error) {
+    console.error('Error while checking authentication status:', error);
+    return false;
+  }
+};
 interface IUserForm {
   email: string;
   password: string;
@@ -32,7 +42,7 @@ const defaultValues = {
 };
 
 const SignIn = (): JSX.Element => {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState('');
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const toast = useToast();
@@ -44,68 +54,68 @@ const SignIn = (): JSX.Element => {
 
   const {handleSubmit, control} = methods;
 
-  const signIn = async (formData: IUserForm) => {
+  const api = create({
+    baseURL: 'https://lzone.secret-agents.ru/api/v2/auth',
+  });
+  
+  // Function to perform the login request
+  const loginUser = async (data) => {
+      const formData = {
+      email: data.email.trim(),
+      password: data.password.trim(),
+    };
+   
     try {
-      const data = {...formData};
+      // Make the API request to the sign_in endpoint
+      const response = await api.post('/sign_in', formData);
 
-      let user: string | null = await AsyncStorage.getItem('user');
-      if (user) {
-        let parsed = JSON.parse(user);
-        if (data.email === parsed.email) {
-          console.log(
-            data.email,
-            '   data.email    ',
-            parsed.email,
-            '   parsed.email   ',
-          );
-          dispatch(setUserData(parsed));
-          toast.show('Logged in successfully', {
-            type: 'success',
-            placement: 'top',
-            duration: 4000,
-            animationType: 'slide-in',
-          });
-          navigation.navigate(EPath.HOME as never);
-        } else {
-          console.log(
-            data.email,
-            '   data.email    ',
-            parsed.email,
-            '   parsed.emailf   ',
-          );
-        }
+     console.log(formData,'aaaa')
+      // console.log(response.token,'baaa')
+      // console.log(response,'caaa')
+      if (!response.ok) {
+        // Login successful, return the user data
+        console.log('FIL')
+        return { success: false, errors: response.errors };
       } else {
-        toast.show('There is no such user. Please register', {
-          type: 'danger',
-          placement: 'top',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
+        // Login failed, handle the error
+        console.log('SUCCESS')
+          AsyncStorage.setItem('authorization', response.headers.authorization );
+          return {response: response.data, success: true};
       }
-    } catch (error: any) {
-      Alert.alert(error);
+    } catch (error) {
+      // Handle any network or other errors
+      return { success: false, errors: ['An error occurred. Please try again.'] };
     }
   };
-
-  const signinHandler = async (formData: IUserForm) => {
-    const data = {...formData};
-
-    const api = create({
-      baseURL: 'https://lzone.secret-agents.ru',
-      // headers: { Accept: 'application/vnd.github.v3+json' },
-    })
-
-    const abo = api.post('/api/v2/auth/sign_in', { email: 'bullet2271293@gmail.com', password: 'beta1234' })
-    console.log(abo, 'aboaas')
-    dispatch(setUserData(abo));
-          toast.show('Logged in successfully', {
-            type: 'success',
-            placement: 'top',
-            duration: 4000,
-            animationType: 'slide-in',
-          });
-          navigation.navigate(EPath.HOME as never);
-  };
+  const signinHandler = (data) => {
+    loginUser(data) 
+  .then((userData) => {
+    console.log(userData,'aaa')
+    if (!userData.success) {
+      
+      console.log('NOT SUCC')
+      // Login failed, handle the errors
+      console.error('Login failed with errors:', userData.errors);
+    } else {
+      console.log('SCS')
+      // Login successful, use the userData object
+      
+      setUserData(userData.response)
+      navigation.replace(EPath.HOME as never); 
+      console.log('Logged in user data:', userData);
+      
+    }
+  })
+  .catch((error) => {
+    // Handle any unexpected errors
+    console.error('Unexpected error occurred:', error);
+  });
+  }
+  
+  // Usage example:
+  const email = 'bullet2271293@gmail.com';
+  const password = 'beta1234';
+  console.log(userData,'DAT ')
 
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
