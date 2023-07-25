@@ -18,7 +18,7 @@ import {IconButton} from 'react-native-paper';
 import {EPath} from '../../shared/models/enums/path.enum';
 import {useToast} from 'react-native-toast-notifications';
 import RNButton from '../../shared/Button';
-import { create } from 'apisauce'
+import {create} from 'apisauce';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Function to check if the user is logged in
@@ -57,72 +57,72 @@ const SignIn = (): JSX.Element => {
   const api = create({
     baseURL: 'https://lzone.secret-agents.ru/api/v2/auth',
   });
-  
+
   // Function to perform the login request
-  const loginUser = async (data) => {
-      const formData = {
+  const loginUser = async data => {
+    const formData = {
       email: data.email.trim(),
       password: data.password.trim(),
     };
-   
+
     try {
       // Make the API request to the sign_in endpoint
       const response = await api.post('/sign_in', formData);
 
-     console.log(formData,'aaaa')
+      console.log(formData, 'aaaa');
       // console.log(response.token,'baaa')
-      // console.log(response,'caaa')
+      console.log(response, 'caaa');
       if (!response.ok) {
         // Login successful, return the user data
-        console.log('FIL')
-        return { success: false, errors: response.errors };
+        console.log('FIL');
+        return {success: false, errors: response.errors};
       } else {
         // Login failed, handle the error
-        console.log('SUCCESS')
-          AsyncStorage.setItem('authorization', response.headers.authorization );
-          return {response: response.data, success: true};
+        console.log('SUCCESS');
+        AsyncStorage.setItem('authorization', response.headers.authorization);
+        return {response: response.data, success: true};
       }
     } catch (error) {
       // Handle any network or other errors
-      return { success: false, errors: ['An error occurred. Please try again.'] };
+      return {success: false, errors: ['An error occurred. Please try again.']};
     }
   };
-  const signinHandler = (data) => {
-    loginUser(data) 
-  .then((userData) => {
-    console.log(userData,'aaa')
-    if (!userData.success) {
-      
-      console.log('NOT SUCC')
-      // Login failed, handle the errors
-      console.error('Login failed with errors:', userData.errors);
-    } else {
-      console.log('SCS')
-      // Login successful, use the userData object
-      
-      setUserData(userData.response)
-      navigation.replace(EPath.HOME as never); 
-      console.log('Logged in user data:', userData);
-      
-    }
-  })
-  .catch((error) => {
-    // Handle any unexpected errors
-    console.error('Unexpected error occurred:', error);
-  });
-  }
-  
+  const signinHandler = data => {
+    loginUser(data)
+      .then(userData => {
+        console.log(userData, 'aaa');
+        if (!userData.success) {
+          console.log('NOT SUCC');
+          // Login failed, handle the errors
+          console.error('Login failed with errors:', userData.errors);
+        } else {
+          console.log('SCS');
+          // Login successful, use the userData object
+
+          setUserData(userData.response);
+          navigation.navigate(EPath.HOME as never);
+          console.log('Logged in user data:', userData);
+        }
+      })
+      .catch(error => {
+        // Handle any unexpected errors
+        console.error('Unexpected error occurred:', error);
+      });
+  };
+
   // Usage example:
   const email = 'bullet2271293@gmail.com';
   const password = 'beta1234';
-  console.log(userData,'DAT ')
+  console.log(userData, 'DAT ');
 
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
       <View style={{marginHorizontal: 17}}>
         <View style={{height: '82%'}}>
           <View style={{marginBottom: 35}}>
-            <Text style={styles.text}>Log In to Your Informed Today Account</Text>
+            <Text style={styles.text}>
+              Log In to Your Informed Today Account
+            </Text>
           </View>
           <View>
             <FormProvider {...methods}>
@@ -162,10 +162,7 @@ const SignIn = (): JSX.Element => {
               />
             </FormProvider>
           </View>
-
-          
         </View>
-       
       </View>
     </View>
   );
@@ -191,7 +188,6 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginTop: 15,
-
   },
   input: {
     marginBottom: 30,

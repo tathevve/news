@@ -1,6 +1,5 @@
 export enum EPath {
-    HOME = 'home',
-    ACCOUNT = 'account',
-    SIGNIN = 'SignIn',
-  }
-  
+  HOME = 'home',
+  ACCOUNT = 'account',
+  SIGNIN = 'SignIn',
+}
