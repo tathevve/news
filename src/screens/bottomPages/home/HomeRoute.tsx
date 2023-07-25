@@ -13,8 +13,7 @@ export default function HomeRoute(): JSX.Element {
   const api = create({
     baseURL: 'https://lzone.secret-agents.ru/api',
     headers: {
-      authorization:
-        'Bearer eyJhY2Nlc3MtdG9rZW4iOiJPbHctdXV5My1LRnlfZWtXWEI2ZDZRIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IllOclFGSFVHRzFOWllTekF3eUJWX1EiLCJleHBpcnkiOiI0ODQ1OTAxMTgwIiwidWlkIjoiYnVsbGV0MjI3MTI5M0BnbWFpbC5jb20ifQ==',
+      authorization: '',
     },
   });
 
